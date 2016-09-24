@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.util.Queue;
 import java.util.LinkedList;
 
-public class Q1 {
+public class problem1 {
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
 
