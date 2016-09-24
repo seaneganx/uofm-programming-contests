@@ -14,7 +14,7 @@ public class Q1 {
 			int startInter = in.nextInt();
 			int startSpeed = in.nextInt();
 
-			// init speeds to -1 as invalid speed
+			// initialize speeds to -1 so we can check if a speed is invalid
 			int[][] speeds = new int[numInters][numInters];
 			for(int x = 0; x < numInters; x++) {
 				for(int y = 0; y < numInters; y++) {
@@ -22,7 +22,7 @@ public class Q1 {
 				}
 			}
 
-			// read in graph info
+			// read the graph into an adjacency matrix
 			for(int road = 0; road < numRoads; road++) {
 				int edge1 = in.nextInt();
 				int edge2 = in.nextInt();
@@ -32,16 +32,19 @@ public class Q1 {
 				speeds[edge2][edge1] = speed;
 			}
 
+			// stuff necessary for the search to complete
 			Queue<Integer> positionQ = new LinkedList<Integer>();
 			Queue<Integer> speedQ = new LinkedList<Integer>();
 			int minSpeed = startSpeed;
+
+			// we will mark index (i, j) to true as a transition from intersection i to intersection j (DIRECTION MATTERS)
+			// since there is only one road between any two intersections, transitioning in the same direction over the same road causes an infinite cycle
 			boolean[][] completedTransitions = new boolean[numInters][numInters];
 
 			// start the search
 			speedQ.add(startSpeed);
 			positionQ.add(startInter);
 
-			// keep going until we run out of paths to check
 			while(!positionQ.isEmpty()) {
 
 				// where are we currently?
@@ -54,14 +57,14 @@ public class Q1 {
 				// add all the possible next neighbours to the queues
 				for(int i = 0; i < numInters; i++) {
 
-					// check if we already did this one before
-					// also check if there is an existing connection
+					// check if we already did this transition before
+					// also check if there is a road between these intersections
 					// also check if it's "legal" to take that road (is the difference in speed 10 or 0)
 					if(!completedTransitions[curPos][i] && speeds[curPos][i] != -1 && 10 >= curSpeed - speeds[curPos][i] && curSpeed - speeds[curPos][i] >= 0) {
 						positionQ.add(i);
 						speedQ.add(speeds[curPos][i]);
 
-						// mark this transition as "happened"
+						// mark down that we've considered this transition
 						completedTransitions[curPos][i] = true;
 					}
 				}
